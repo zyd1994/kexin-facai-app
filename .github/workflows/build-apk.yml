@@ -22,10 +22,24 @@ jobs:
 
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
+      with:
+        api-level: 33
+        build-tools-version: 33.0.0
+        ndk-version: 25.1.8937393
+        cmake-version: 3.22.1
+        platforms: "android-33"
+        addons: "addon-google_apis-google-33"
+
+    - name: Display Android SDK Info
+      run: |
+        echo "ANDROID_HOME: $ANDROID_HOME"
+        echo "ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT"
+        ls -la $ANDROID_HOME/
 
     - name: Accept Android Licenses
       run: |
-        yes | sdkmanager --licenses || true
+        echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
+        echo "Attempting to accept Android licenses..."
 
     - name: Install Cordova
       run: |
