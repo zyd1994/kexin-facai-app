@@ -1,0 +1,117 @@
+name: Build Android APK (Simple & Debug)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Debug - Show Environment
+      run: |
+        echo "Runner OS: $(uname -a)"
+        echo "Node version: $(node --version)"
+        echo "npm version: $(npm --version)"
+        echo "Working directory: $(pwd)"
+        ls -la
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        packages: |
+          platform-tools
+          platforms;android-33
+          build-tools;33.0.0
+        accept-android-sdk-licenses: true
+
+    - name: Debug - Android Environment
+      run: |
+        echo "ANDROID_HOME: $ANDROID_HOME"
+        echo "ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT"
+        echo "PATH: $PATH"
+        ls -la $ANDROID_HOME/
+        $ANDROID_HOME/tools/bin/sdkmanager --list_installed || echo "sdkmanager not found"
+
+    - name: Install Cordova
+      run: |
+        npm install -g cordova@11.0.0
+        cordova --version
+
+    - name: Install Project Dependencies
+      run: |
+        npm install
+        npm list cordova-android || echo "cordova-android not found in dependencies"
+
+    - name: Debug - Check Cordova
+      run: |
+        cordova requirements
+        cordova platform ls
+
+    - name: Add Android Platform
+      run: |
+        cordova platform add android@10.1.2 --verbose
+        cordova platform ls
+
+    - name: Debug - Check Android Platform
+      run: |
+        ls -la platforms/android/
+        echo "Checking build.gradle..."
+        find platforms/android -name "build.gradle" -type f | head -5 | xargs cat | head -20
+
+    - name: Set Gradle Properties
+      run: |
+        echo "Setting Gradle properties..."
+        mkdir -p ~/.gradle
+        echo "org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m" > ~/.gradle/gradle.properties
+        echo "android.useAndroidX=true" >> ~/.gradle/gradle.properties
+        echo "android.enableJetifier=true" >> ~/.gradle/gradle.properties
+
+    - name: Build APK with Debug
+      run: |
+        echo "Starting Cordova build..."
+        cordova build android --verbose -- --warning-mode all
+        echo "Build completed"
+
+    - name: Debug - Find APK Files
+      run: |
+        echo "Searching for APK files..."
+        find . -name "*.apk" -type f 2>/dev/null || echo "No APK files found"
+        find platforms/android -type f -name "*.apk" 2>/dev/null || echo "No APK files in android platform"
+        if [ -d "platforms/android/app/build/outputs/apk" ]; then
+          echo "APK directory exists:"
+          ls -la platforms/android/app/build/outputs/apk/
+          find platforms/android/app/build/outputs/apk/ -type f
+        else
+          echo "APK directory does not exist"
+        fi
+
+    - name: Upload APK Artifact
+      if: success()
+      uses: actions/upload-artifact@v4
+      with:
+        name: kexin-facai-apk-simple
+        path: |
+          platforms/android/app/build/outputs/apk/debug/*.apk
+          platforms/android/app/build/outputs/apk/release/*.apk
+        retention-days: 7
+
+    - name: Debug - Build Summary
+      run: |
+        echo "=== Build Summary ==="
+        echo "Build completed at: $(date)"
+        echo "Working directory: $(pwd)"
+        echo "APK search result:"
+        find . -name "*.apk" -type f 2>/dev/null | while read f; do
+          echo "  - $f ($(du -h "$f" | cut -f1))"
+        done || echo "No APK files found"
