@@ -1,0 +1,61 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: Accept Android Licenses
+      run: |
+        yes | sdkmanager --licenses || true
+
+    - name: Install Cordova
+      run: |
+        npm install -g cordova
+
+    - name: Install Dependencies
+      run: |
+        npm install
+
+    - name: Add Android Platform
+      run: |
+        cordova platform add android
+
+    - name: Build APK
+      run: |
+        cordova build android
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: kexin-facai-apk
+        path: |
+          platforms/android/app/build/outputs/apk/debug/*.apk
+          platforms/android/app/build/outputs/apk/release/*.apk
+        retention-days: 7
+
+    - name: Display APK Info
+      run: |
+        echo "APK构建完成！"
+        echo "APK文件列表："
+        find platforms/android/app/build/outputs/apk/ -name "*.apk" -type f | while read file; do
+          echo "- $(basename "$file") ($(du -h "$file" | cut -f1))"
+        done

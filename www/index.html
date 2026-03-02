@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>可欣发大财 - 财运测试</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFEBB5 50%, #FFD700 100%);
+            color: #5C3B00;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 欢迎页样式 */
+        .welcome-logo {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .welcome-logo i {
+            font-size: 80px;
+            color: #FFD700;
+            text-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+            margin-bottom: 20px;
+        }
+
+        .welcome-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: #D4AF37;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            letter-spacing: 2px;
+        }
+
+        .welcome-title span {
+            display: block;
+            font-size: 36px;
+            font-weight: 500;
+            color: #B8860B;
+        }
+
+        .welcome-subtitle {
+            font-size: 18px;
+            color: #8B6914;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+            margin: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 200px;
+        }
+
+        .btn:hover, .btn:active {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #E8E8E8 0%, #CCCCCC 100%);
+            color: #666;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 测试页样式 */
+        .question-box {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .question-counter {
+            font-size: 14px;
+            color: #D4AF37;
+            font-weight: 500;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .question-counter i {
+            margin-right: 8px;
+        }
+
+        .question-text {
+            font-size: 22px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: #FFF9E6;
+            border: 2px solid #FFEBB5;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 16px;
+            color: #5C3B00;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option:hover, .option:active {
+            background: #FFD700;
+            border-color: #D4AF37;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+        }
+
+        .option.selected {
+            background: #D4AF37;
+            border-color: #B8860B;
+            color: white;
+            font-weight: 500;
+        }
+
+        /* 结果页样式 */
+        .result-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .result-icon {
+            font-size: 60px;
+            color: #FFD700;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #D4AF37;
+            margin-bottom: 15px;
+        }
+
+        .result-desc {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .result-score {
+            font-size: 18px;
+            color: #8B6914;
+            font-weight: 500;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: #FFF9E6;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        .ad-prompt {
+            background: linear-gradient(135deg, #FFF5CC 0%, #FFE699 100%);
+            border: 2px dashed #D4AF37;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .ad-prompt i {
+            font-size: 28px;
+            color: #D4AF37;
+            margin-bottom: 10px;
+        }
+
+        .ad-prompt h3 {
+            font-size: 18px;
+            color: #8B6914;
+            margin-bottom: 8px;
+        }
+
+        .ad-prompt p {
+            font-size: 14px;
+            color: #A67C00;
+            opacity: 0.8;
+        }
+
+        /* 底部装饰 */
+        .decoration {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(to top, rgba(255, 215, 0, 0.2), transparent);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            .welcome-title {
+                font-size: 36px;
+            }
+
+            .welcome-title span {
+                font-size: 30px;
+            }
+
+            .question-box, .result-card {
+                padding: 25px 20px;
+            }
+
+            .question-text {
+                font-size: 20px;
+            }
+
+            .btn {
+                padding: 14px 30px;
+                min-width: 180px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="decoration"></div>
+
+    <div class="container">
+        <!-- 欢迎页 -->
+        <div class="page active" id="page-welcome">
+            <div class="welcome-logo">
+                <i class="fa fa-money"></i>
+                <h1 class="welcome-title">可欣<span>发大财</span></h1>
+            </div>
+            <p class="welcome-subtitle">2026年专属财运测试 · 测测你的财运指数</p>
+            <button class="btn" onclick="goToTest()">
+                <i class="fa fa-play-circle"></i> 开始测试
+            </button>
+            <p style="margin-top: 20px; font-size: 14px; color: #A67C00;">
+                <i class="fa fa-diamond"></i> 简单5题 · 精准分析 · 财运指南
+            </p>
+        </div>
+
+        <!-- 测试页 -->
+        <div class="page" id="page-test">
+            <div class="question-box">
+                <div class="question-counter">
+                    <i class="fa fa-question-circle"></i>
+                    <span id="current-question">第1题</span> / <span id="total-questions">5</span>
+                </div>
+                <div class="question-text" id="question-text">题目加载中...</div>
+                <div class="options-container" id="options-container">
+                    <!-- 选项动态生成 -->
+                </div>
+            </div>
+            <div style="margin-top: 20px; font-size: 14px; color: #A67C00;">
+                <i class="fa fa-lightbulb-o"></i> 根据直觉选择，答案没有对错
+            </div>
+        </div>
+
+        <!-- 结果页 -->
+        <div class="page" id="page-result">
+            <div class="result-card">
+                <div class="result-icon">
+                    <i class="fa fa-trophy"></i>
+                </div>
+                <h2 class="result-title" id="result-title">财运结果</h2>
+                <div class="result-score" id="result-score">得分: 0/15</div>
+                <p class="result-desc" id="result-description">分析结果加载中...</p>
+
+                <div class="ad-prompt">
+                    <i class="fa fa-unlock-alt"></i>
+                    <h3>解锁完整财运分析</h3>
+                    <p>观看一段广告，获取详细财运指南和2026年发财建议</p>
+                </div>
+
+                <button class="btn" onclick="unlockFullAnalysis()">
+                    <i class="fa fa-eye"></i> 看广告解锁完整分析
+                </button>
+                <button class="btn btn-secondary" onclick="restartTest()" style="margin-top: 15px;">
+                    <i class="fa fa-refresh"></i> 重新测试
+                </button>
+            </div>
+
+            <div style="margin-top: 20px; font-size: 14px; color: #A67C00;">
+                <i class="fa fa-share-alt"></i> 分享给好友一起测财运
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 题目数据
+        const questions = [
+            {
+                text: "当赚钱机会出现在面前时，你会如何应对？",
+                options: [
+                    { text: "果断抓住，马上行动", score: 3, icon: "fa-bolt" },
+                    { text: "谨慎研究，观望一下", score: 2, icon: "fa-search" },
+                    { text: "担心风险，暂时放弃", score: 1, icon: "fa-shield" }
+                ]
+            },
+            {
+                text: "在财富积累中，你更看重哪个因素？",
+                options: [
+                    { text: "人脉关系与机会", score: 3, icon: "fa-users" },
+                    { text: "稳定收入与储蓄", score: 2, icon: "fa-bank" },
+                    { text: "保本安全最重要", score: 1, icon: "fa-lock" }
+                ]
+            },
+            {
+                text: "今年是否有扩大投资或生意的打算？",
+                options: [
+                    { text: "非常想，正在寻找机会", score: 3, icon: "fa-rocket" },
+                    { text: "看情况，有合适机会再说", score: 2, icon: "fa-balance-scale" },
+                    { text: "不想，保持现状就好", score: 1, icon: "fa-pause" }
+                ]
+            },
+            {
+                text: "你的消费观念更倾向于？",
+                options: [
+                    { text: "投资自己，花钱提升能力", score: 3, icon: "fa-graduation-cap" },
+                    { text: "该花就花，但也会存钱", score: 2, icon: "fa-shopping-cart" },
+                    { text: "非常节省，能省则省", score: 1, icon: "fa-piggy-bank" }
+                ]
+            },
+            {
+                text: "你觉得自己2026年的财运会是？",
+                options: [
+                    { text: "肯定旺，充满信心", score: 3, icon: "fa-smile-o" },
+                    { text: "一般般，平稳度过", score: 2, icon: "fa-meh-o" },
+                    { text: "不太乐观，需要努力", score: 1, icon: "fa-frown-o" }
+                ]
+            }
+        ];
+
+        // 结果分析
+        const results = [
+            {
+                minScore: 13,
+                maxScore: 15,
+                title: "💰 超级旺财体质",
+                description: "2026年是你财运爆棚的一年！正财偏财双丰收，投资眼光独到，贵人运强劲。抓住机遇大胆行动，财富积累速度超乎想象。",
+                icon: "fa-diamond"
+            },
+            {
+                minScore: 10,
+                maxScore: 12,
+                title: "🌟 稳步发财型",
+                description: "财运稳步上升，努力必有回报。通过踏实工作和聪明理财，你的积蓄会持续增长。下半年可能有意外之喜哦！",
+                icon: "fa-line-chart"
+            },
+            {
+                minScore: 7,
+                maxScore: 9,
+                title: "✨ 小财不断型",
+                description: "平安顺利，小财不断。虽然没有大富大贵，但生活滋润，偶尔还有惊喜收入。注意把握身边的小机会。",
+                icon: "fa-gift"
+            },
+            {
+                minScore: 5,
+                maxScore: 6,
+                title: "🌱 财运萌芽期",
+                description: "财运正在萌芽阶段，需要更多耐心和努力。今年是打好基础的好时机，学习理财知识，为未来做准备。",
+                icon: "fa-leaf"
+            }
+        ];
+
+        // 游戏状态
+        let currentQuestionIndex = 0;
+        let totalScore = 0;
+        let selectedOptions = [];
+
+        // 页面切换
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // 开始测试
+        function goToTest() {
+            currentQuestionIndex = 0;
+            totalScore = 0;
+            selectedOptions = [];
+            showPage('page-test');
+            loadQuestion();
+        }
+
+        // 加载题目
+        function loadQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                showResult();
+                return;
+            }
+
+            const question = questions[currentQuestionIndex];
+            document.getElementById('question-text').textContent = question.text;
+            document.getElementById('current-question').textContent = `第${currentQuestionIndex + 1}题`;
+            document.getElementById('total-questions').textContent = questions.length;
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                if (selectedOptions[currentQuestionIndex] === index) {
+                    optionElement.classList.add('selected');
+                }
+
+                optionElement.innerHTML = `
+                    <i class="fa ${option.icon}" style="margin-right: 8px;"></i>
+                    ${option.text}
+                `;
+
+                optionElement.addEventListener('click', () => {
+                    // 移除之前的选择
+                    Array.from(optionsContainer.children).forEach(child => {
+                        child.classList.remove('selected');
+                    });
+
+                    // 标记当前选择
+                    optionElement.classList.add('selected');
+                    selectedOptions[currentQuestionIndex] = index;
+
+                    // 延迟加载下一题
+                    setTimeout(() => {
+                        totalScore += option.score;
+                        currentQuestionIndex++;
+                        loadQuestion();
+                    }, 300);
+                });
+
+                optionsContainer.appendChild(optionElement);
+            });
+        }
+
+        // 显示结果
+        function showResult() {
+            // 计算结果
+            let result = results.find(r => totalScore >= r.minScore && totalScore <= r.maxScore);
+            if (!result) {
+                result = results[results.length - 1]; // 默认最低档
+            }
+
+            // 更新结果页面
+            document.getElementById('result-title').textContent = result.title;
+            document.getElementById('result-score').textContent = `得分: ${totalScore}/15`;
+            document.getElementById('result-description').textContent = result.description;
+
+            // 更新图标
+            const resultIcon = document.querySelector('#page-result .result-icon i');
+            resultIcon.className = `fa ${result.icon}`;
+
+            showPage('page-result');
+        }
+
+        // 解锁完整分析
+        function unlockFullAnalysis() {
+            // 模拟广告播放
+            const adContent = `
+                <div style="text-align: left; margin-top: 20px; padding: 20px; background: #FFF9E6; border-radius: 10px;">
+                    <h3 style="color: #D4AF37; margin-bottom: 15px;">📈 完整财运分析报告</h3>
+                    <p><strong>财富指数：</strong>${totalScore}/15 (${Math.round(totalScore/15*100)}%)</p>
+                    <p><strong>2026年财运趋势：</strong>上升期，第三季度达到高峰</p>
+                    <p><strong>幸运行业：</strong>互联网、金融、创意产业</p>
+                    <p><strong>发财建议：</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>把握3月、8月的投资机会</li>
+                        <li>拓展东北方向的人脉关系</li>
+                        <li>尝试副业或小额投资</li>
+                        <li>学习理财知识，提高财商</li>
+                    </ul>
+                    <p><strong>幸运数字：</strong>7、15、23</p>
+                    <p><strong>幸运颜色：</strong>金色、红色</p>
+                </div>
+            `;
+
+            // 显示完整分析
+            const resultDesc = document.getElementById('result-description');
+            resultDesc.innerHTML = resultDesc.textContent + adContent;
+
+            // 隐藏广告提示
+            document.querySelector('.ad-prompt').style.display = 'none';
+
+            // 更改按钮文本
+            const unlockBtn = document.querySelector('#page-result .btn');
+            unlockBtn.innerHTML = '<i class="fa fa-check"></i> 已解锁完整分析';
+            unlockBtn.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+            unlockBtn.onclick = null;
+
+            alert('🎉 广告播放完成！完整财运分析已解锁。');
+        }
+
+        // 重新测试
+        function restartTest() {
+            showPage('page-welcome');
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 确保欢迎页显示
+            showPage('page-welcome');
+
+            // 添加分享功能
+            if (navigator.share) {
+                const shareBtn = document.createElement('button');
+                shareBtn.className = 'btn btn-secondary';
+                shareBtn.innerHTML = '<i class="fa fa-share-alt"></i> 分享测试';
+                shareBtn.onclick = () => {
+                    navigator.share({
+                        title: '可欣发大财 - 财运测试',
+                        text: '快来测测你2026年的财运指数！',
+                        url: window.location.href
+                    });
+                };
+                document.querySelector('#page-result .result-card').appendChild(shareBtn);
+            }
+        });
+    </script>
+</body>
+</html>

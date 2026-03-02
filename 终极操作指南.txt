@@ -1,0 +1,97 @@
+# 可欣发大财APP - 终极操作指南
+
+## 你的目标：获得安卓APK文件
+## 预计时间：15-30分钟
+## 难度：简单（只需复制粘贴命令）
+
+## 🎯 总览
+1. 注册GitHub账号（如已有则跳过）
+2. 创建GitHub仓库
+3. 运行自动脚本上传代码
+4. 等待GitHub自动构建APK
+5. 下载APK文件
+
+## 🔧 第一步：运行自动准备脚本
+双击运行：`auto-upload.bat`
+
+脚本会引导你完成：
+- 配置Git信息
+- 初始化本地仓库
+- 准备上传代码
+
+## 🌐 第二步：创建GitHub仓库（手动）
+1. 打开浏览器访问：https://github.com
+2. 登录或注册账号
+3. 点击右上角 "+" → "New repository"
+4. 填写信息：
+   - Repository name: kexin-facai-app
+   - Description: 可欣发大财 - 财运测试APP
+   - 选择 Public
+   - 不要勾选 "Initialize with README"
+5. 点击 "Create repository"
+
+## 📋 第三步：获取仓库URL
+创建仓库后，你会看到类似这样的页面：
+```
+Quick setup — if you've done this kind of thing before
+or HTTPS    https://github.com/你的用户名/kexin-facai-app.git
+```
+
+复制这个URL（https://... 格式）
+
+## 💻 第四步：连接并上传代码
+回到命令行或`auto-upload.bat`脚本，粘贴URL
+
+自动脚本会执行：
+```bash
+git remote add origin [你复制的URL]
+git branch -M main
+git push -u origin main
+```
+
+## ⏳ 第五步：等待自动构建
+1. 在GitHub仓库页面，点击顶部 "Actions"
+2. 等待5-10分钟，直到所有步骤变绿色
+3. 在 "Artifacts" 部分下载 `kexin-facai-apk.zip`
+
+## 📱 第六步：安装APK
+1. 解压ZIP文件，得到APK
+2. 通过USB、微信、QQ等方式传到手机
+3. 在手机设置中允许"未知来源应用安装"
+4. 安装并运行"可欣发大财"APP
+
+## 🎮 立即体验（无需等待）
+双击：`www\index.html`
+在浏览器中预览完整APP功能！
+
+## ❓ 常见问题
+
+### Q: 没有GitHub账号？
+A: 访问 https://github.com 免费注册
+
+### Q: 不会用命令行？
+A: 双击 `auto-upload.bat`，按提示操作
+
+### Q: 构建失败？
+A: 查看GitHub Actions日志，通常会自动修复
+
+### Q: 下载的APK无法安装？
+A: 确保手机Android版本5.0以上，开启"未知来源应用安装"
+
+## 📞 紧急帮助
+如果遇到问题：
+1. 重新运行 `auto-upload.bat`
+2. 查看 `github-guide.md` 详细指南
+3. 确保网络连接正常
+
+## 🎉 恭喜！
+完成以上步骤，你将拥有：
+✅ 可安装的安卓APK文件
+✅ 金色主题财运测试APP
+✅ 广告变现功能
+✅ 完整源代码
+
+现在开始吧！双击 `auto-upload.bat`！
+
+---
+祝你财源广进！ 🎱💰

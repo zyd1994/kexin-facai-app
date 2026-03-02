@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1280" viewBox="0 0 800 1280">
+  <!-- 金色渐变背景 -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF9E6"/>
+      <stop offset="50%" stop-color="#FFEBB5"/>
+      <stop offset="100%" stop-color="#FFD700"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="800" height="1280" fill="url(#bgGradient)"/>
+
+  <!-- 中央标志 -->
+  <g transform="translate(400, 540)">
+    <!-- 外圈 -->
+    <circle cx="0" cy="0" r="120" fill="#D4AF37" opacity="0.9"/>
+    <circle cx="0" cy="0" r="110" fill="#FFD700"/>
+
+    <!-- "财"字 -->
+    <text x="0" y="30" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="100" font-weight="bold">财</text>
+  </g>
+
+  <!-- 应用名称 -->
+  <text x="400" y="750" text-anchor="middle" fill="#5C3B00" font-family="Arial, sans-serif" font-size="60" font-weight="bold">可欣发大财</text>
+  <text x="400" y="820" text-anchor="middle" fill="#8B6914" font-family="Arial, sans-serif" font-size="30">财运测试趣味APP</text>
+
+  <!-- 加载提示 -->
+  <text x="400" y="1100" text-anchor="middle" fill="#A67C00" font-family="Arial, sans-serif" font-size="24">加载中...</text>
+
+  <!-- 装饰元素 -->
+  <circle cx="150" cy="300" r="40" fill="#FFD700" opacity="0.3"/>
+  <circle cx="650" cy="1000" r="60" fill="#D4AF37" opacity="0.2"/>
+  <circle cx="700" cy="200" r="30" fill="#FFD700" opacity="0.4"/>
+  <circle cx="100" cy="900" r="50" fill="#D4AF37" opacity="0.3"/>
+</svg>

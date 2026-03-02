@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.kexin.facai" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>可欣发大财</name>
+    <description>
+        财运测试趣味APP，测测你2026年的财运指数，获取发财建议！
+    </description>
+    <author email="kexin@example.com" href="https://example.com">
+        可欣
+    </author>
+
+    <!-- 应用配置 -->
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+
+    <!-- 偏好设置 -->
+    <preference name="ScrollEnabled" value="false" />
+    <preference name="android-minSdkVersion" value="22" />
+    <preference name="android-targetSdkVersion" value="33" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="android-maxSdkVersion" value="33" />
+    <preference name="AutoHideSplashScreen" value="true" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="SplashMaintainAspectRatio" value="true" />
+    <preference name="FadeSplashScreenDuration" value="300" />
+    <preference name="SplashShowOnlyFirstTime" value="false" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="orientation" value="portrait" />
+
+    <!-- 平台 -->
+    <platform name="android">
+        <allow-intent href="market:*" />
+
+        <!-- 图标 (使用Cordova默认图标) -->
+        <!--
+        <icon src="res/icon/android/icon-36-ldpi.png" density="ldpi" />
+        <icon src="res/icon/android/icon-48-mdpi.png" density="mdpi" />
+        <icon src="res/icon/android/icon-72-hdpi.png" density="hdpi" />
+        <icon src="res/icon/android/icon-96-xhdpi.png" density="xhdpi" />
+        <icon src="res/icon/android/icon-144-xxhdpi.png" density="xxhdpi" />
+        <icon src="res/icon/android/icon-192-xxxhdpi.png" density="xxxhdpi" />
+        -->
+
+        <!-- 启动画面 (使用Cordova默认启动画面) -->
+        <!--
+        <splash src="res/screen/android/splash-land-hdpi.png" density="land-hdpi"/>
+        <splash src="res/screen/android/splash-land-ldpi.png" density="land-ldpi"/>
+        <splash src="res/screen/android/splash-land-mdpi.png" density="land-mdpi"/>
+        <splash src="res/screen/android/splash-land-xhdpi.png" density="land-xhdpi"/>
+        <splash src="res/screen/android/splash-port-hdpi.png" density="port-hdpi"/>
+        <splash src="res/screen/android/splash-port-ldpi.png" density="port-ldpi"/>
+        <splash src="res/icon/android/icon-72-hdpi.png" density="port-mdpi"/>
+        <splash src="res/screen/android/splash-port-xhdpi.png" density="port-xhdpi"/>
+        -->
+    </platform>
+
+    <!-- 插件 -->
+    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <plugin name="cordova-plugin-statusbar" spec="2" />
+    <plugin name="cordova-plugin-splashscreen" spec="5" />
+    <!-- AdMob插件需要ADMOB_APP_ID，暂时注释掉 -->
+    <!-- <plugin name="cordova-plugin-admob-free" spec="^0.27.0" /> -->
+
+    <!-- 功能权限 (Android) -->
+    <feature name="StatusBar">
+        <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
+    </feature>
+
+    <!-- 安卓权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+</widget>
