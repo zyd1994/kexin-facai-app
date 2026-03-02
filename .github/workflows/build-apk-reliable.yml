@@ -1,0 +1,90 @@
+name: Build Android APK (Reliable Version)
+
+on:
+  workflow_dispatch:  # 只允许手动触发，避免与主工作流冲突
+  push:
+    branches: [ main ]
+    paths-ignore:  # 忽略某些文件的更改
+      - '**.md'
+      - '.github/workflows/build-apk-reliable.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+
+    - name: Setup Android SDK (Manual)
+      run: |
+        # 下载命令行工具
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -P /tmp
+        mkdir -p /opt/android-sdk/cmdline-tools
+        unzip -q /tmp/commandlinetools-latest.zip -d /opt/android-sdk/cmdline-tools
+        mv /opt/android-sdk/cmdline-tools/cmdline-tools /opt/android-sdk/cmdline-tools/latest
+
+        # 设置环境变量
+        echo "ANDROID_HOME=/opt/android-sdk" >> $GITHUB_ENV
+        echo "ANDROID_SDK_ROOT=/opt/android-sdk" >> $GITHUB_ENV
+        echo "PATH=/opt/android-sdk/cmdline-tools/latest/bin:/opt/android-sdk/platform-tools:$PATH" >> $GITHUB_ENV
+
+        # 显示环境信息
+        echo "Android SDK setup complete"
+        echo "ANDROID_HOME: $ANDROID_HOME"
+
+    - name: Accept Android Licenses
+      run: |
+        # 预先接受所有许可证
+        mkdir -p $ANDROID_HOME/licenses
+        echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > $ANDROID_HOME/licenses/android-sdk-license
+        echo -e "\nd56f5187479451eabf01fb78af6dfcb131a6481e" >> $ANDROID_HOME/licenses/android-sdk-license
+        echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_HOME/licenses/android-sdk-preview-license
+        echo "Android licenses pre-accepted"
+
+    - name: Install Android Components
+      run: |
+        # 安装必要的Android组件
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT --update
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-33" "build-tools;33.0.0"
+
+        # 验证安装
+        echo "Installed components:"
+        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT --list_installed
+
+    - name: Install Cordova
+      run: |
+        npm install -g cordova
+
+    - name: Install Dependencies
+      run: |
+        npm install
+
+    - name: Add Android Platform
+      run: |
+        cordova platform add android
+
+    - name: Build APK
+      run: |
+        cordova build android
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: kexin-facai-apk-reliable
+        path: |
+          platforms/android/app/build/outputs/apk/debug/*.apk
+        retention-days: 7
+
+    - name: Display APK Info
+      run: |
+        echo "🎉 APK构建完成！"
+        echo "APK文件列表："
+        find platforms/android/app/build/outputs/apk/ -name "*.apk" -type f | while read file; do
+          echo "- $(basename "$file") (大小: $(du -h "$file" | cut -f1))"
+        done
